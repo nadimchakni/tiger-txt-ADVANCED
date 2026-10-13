@@ -1,23 +1,22 @@
 import os
 
-API_ID = API_ID = 22609670
-
-API_HASH = os.environ.get("API_HASH", "3506d8474ad1f4f5e79b7c52a5c3e88d")
-
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "6739442523:AAHHA5HZmU6sqI-elmhTs8dwHqfhTizWwnQ")
+API_ID   = int(os.environ.get("API_ID",   "0"))
+API_HASH = os.environ.get("API_HASH",     "")
+BOT_TOKEN = os.environ.get("BOT_TOKEN",   "")
 
 PASS_DB = int(os.environ.get("PASS_DB", "721"))
 
-OWNER = int(os.environ.get("OWNER", 6981453498))
+OWNER = int(os.environ.get("OWNER", "0"))
 
-LOG = -1002070057679
+LOG = int(os.environ.get("LOG", "0"))
 
 try:
-    ADMINS=[]
-    for x in (os.environ.get("ADMINS", "5987970971").split()):
+    ADMINS = []
+    for x in os.environ.get("ADMINS", "").split():
         ADMINS.append(int(x))
 except ValueError:
-        raise Exception("Your Admins list does not contain valid integers.")
-ADMINS.append(OWNER)
+    raise Exception("ADMINS env var must contain space-separated integers.")
+if OWNER:
+    ADMINS.append(OWNER)
 
 

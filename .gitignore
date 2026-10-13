@@ -1,3 +1,7 @@
+# Environment / secrets — never commit these
+.env
+*.env
+
 # Thrill World EPUB downloader — runtime / sensitive files
 tw_app/store/auth.bin
 tw_app/store/auth.bin.bak

@@ -23,14 +23,49 @@ import re
 import os
 
 bot = Client("bot",
-             bot_token= "6739442523:AAHHA5HZmU6sqI-elmhTs8dwHqfhTizWwnQ",
-             api_id=22609670,
-             api_hash= "3506d8474ad1f4f5e79b7c52a5c3e88d")
+             bot_token=BOT_TOKEN,
+             api_id=API_ID,
+             api_hash=API_HASH)
 
 
-@bot.on_message(filters.command(["start"]) & filters.user(ADMINS))
-async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text(f"HELLO I AM TXT DOWNLOADER BOT MADE BY TIGER BOSS [{m.from_user.first_name}](tg://user?id={m.from_user.id})\nPress /BOSS")
+@bot.on_message(filters.command(["start"]))
+async def start_handler(bot: Client, m: Message):
+    user_mention = f"[{m.from_user.first_name}](tg://user?id={m.from_user.id})"
+    is_admin = m.from_user.id in ADMINS
+
+    if is_admin:
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📥 TXT Downloader", callback_data="open_boss")],
+            [InlineKeyboardButton("🌍 Thrill World EPUB", callback_data="open_thrill")],
+        ])
+        await m.reply_text(
+            f"👋 Welcome {user_mention}!\n\n"
+            "Choose a tool:",
+            reply_markup=kb,
+        )
+    else:
+        await m.reply_text(
+            f"👋 Hello {user_mention}!\n"
+            "This is a private bot — access restricted."
+        )
+
+
+@bot.on_callback_query(filters.regex("^open_thrill$") & filters.user(ADMINS))
+async def cb_open_thrill(_, cq):
+    import thrill
+    await cq.message.reply_text(
+        thrill.MENU_TEXT.format(session=thrill._session_label()),
+        reply_markup=thrill.main_kb(),
+    )
+    await cq.answer()
+
+
+@bot.on_callback_query(filters.regex("^open_boss$") & filters.user(ADMINS))
+async def cb_open_boss(bot_c: Client, cq):
+    await cq.answer()
+    editable = await cq.message.reply(
+        f"**Hey [{cq.from_user.first_name}](tg://user?id={cq.from_user.id})\nSend txt file**"
+    )
 
 
 @bot.on_message(filters.command("stop") & filters.user(ADMINS))
@@ -40,7 +75,7 @@ async def restart_handler(_, m):
 
 
 @bot.on_message(filters.command(["BOSS"]) & filters.user(ADMINS))
-async def account_login(bot: Client, m: Message):
+async def boss_handler(bot: Client, m: Message):
     editable = await m.reply_text(f"**Hey [{m.from_user.first_name}](tg://user?id={m.from_user.id})\nSend txt file**")
     input: Message = await bot.listen(editable.chat.id)
     if input.document:
