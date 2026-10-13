@@ -1,0 +1,6 @@
+# Thrill World EPUB downloader — runtime / sensitive files
+tw_app/store/auth.bin
+tw_app/store/auth.bin.bak
+tw_app/store/sessions/*.bin
+tw_app/books/
+tw_app/accounts.json

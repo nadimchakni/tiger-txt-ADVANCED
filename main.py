@@ -214,4 +214,7 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text("🔰Done Boss🔰")
 
 
+import thrill
+thrill.register(bot)
+
 bot.run()
